@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Encuesta</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+  <div class="container">
+    <h1>Encuesta de riesgo Sabbi</h1>
+
+    <form id="surveyForm">
+      {% for pregunta, opciones in question_answer.items() %}
+      <div class="form-group">
+        <label>{{ pregunta }}</label>
+        {% for valor, opcion in opciones.items() %}
+        <label>
+          <input type="checkbox" name="{{ pregunta }}" value="{{ valor }}">
+          {{ opcion }}
+        </label>
+        {% endfor %}
+      </div>
+      {% endfor %}
+
+      <button type="submit">Enviar respuestas</button>
+    </form>
+  </div>
+  <script src="{{ url_for('static', filename='script/script.js') }}"></script>
+</body>
+</html>
