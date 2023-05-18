@@ -16,6 +16,7 @@ document.getElementById('surveyForm').addEventListener('submit', function(event)
       data[key] = value;
     }
   }
+  console.log(data)
 
   fetch('/survey/submit', {
     method: 'POST',
