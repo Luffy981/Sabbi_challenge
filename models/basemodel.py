@@ -3,6 +3,7 @@ import uuid
 from datetime import datetime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, DateTime, Boolean
+import models
 
 
 # Base class from which all mapped classes should inherit
@@ -15,21 +16,45 @@ class BaseModel:
     """
     Defining the base class
     """
-    id = Column(String(60), primary_key=True, unique=True, nullable=False)
-    status = Column(Boolean, default=False, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow(), nullable=False)
     updated_at = Column(DateTime, default=datetime.utcnow(), nullable=False)
 
-    def __init__(self, **kwargs):
+    def __init__(self, *args, **kwargs):
         """Init constructor"""
-        self.id = str(uuid.uuid4())
-        self.created_at = datetime.now()
-        self.updated_at = self.created_at
+        if kwargs:
+            for key, value in kwargs.items():
+                if key != '__class__':
+                    setattr(self, key, value)
 
     def save(self):
         """
         Updates the instance attribute updated_at with the current datetime
         """
         self.updated_at = datetime.now()
+        models.storage.new(self)
+        models.storage.save()
 
-        
+    def __str__(self):
+        """ Str representation """
+        return "[{:s}] {}".format(self.__class__.__name__, self.__dict__)
+
+
+
+    def to_dict(self, save_fs=None):
+        """ Returns a dictionary containing all key/values of the instance"""
+        new_dict = self.__dict__.copy()
+        if "created_at" in new_dict:
+            new_dict["created_at"] = new_dict["created_at"].strftime(date)
+        if "updated_at" in new_dict:
+            new_dict["updated_at"] = new_dict["updated_at"].strftime(date)
+        new_dict["_class__"] = self.__class__.__name__
+        if save_fs is None:
+            if "password" in new_dict:
+                del new_dict["password"]
+        return new_dict
+
+    def delete(self):
+        """
+        Delete the current instance from the storage
+        """
+        models.storage.delete(self)
