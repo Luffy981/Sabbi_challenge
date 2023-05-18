@@ -1,3 +1,4 @@
 pip install Flask
 pip install Flask-Cors
 pip install flasgger==0.9.7b2
+pip3 install mysqlclient
