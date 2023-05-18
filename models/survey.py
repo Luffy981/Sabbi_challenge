@@ -14,7 +14,9 @@ class Survey(BaseModel, Base):
     __tablename__ = 'survey'
     id = Column(Integer, autoincrement=True, primary_key=True, unique=True)
     status_s = Column(Boolean, default=False, nullable=False)
-    result = Column(String(600), nullable=False)
+    total_calculated = Column(Integer, nullable=True)
+    result = Column(String(600), nullable=True)
+    recomendation = Column(String(600), nullable=True)
 
     # Foreign key
     id_user = Column(Integer, ForeignKey('users.id'), nullable=False)
