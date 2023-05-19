@@ -4,9 +4,11 @@
   <meta charset="UTF-8">
   <title>Encuesta</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/logo.css') }}">
 </head>
 <body>
   <div class="container">
+    <img class="logo" src="{{ url_for('static', filename='images/sabbi_logo.jpeg') }}" alt="Logo">
     <h1>Encuesta de riesgo Sabbi</h1>
 
     <form id="surveyForm">

@@ -25,12 +25,22 @@ document.getElementById('surveyForm').addEventListener('submit', function(event)
     },
     body: JSON.stringify(data)
   })
-  .then(response => response.json())
-  .then(result => {
-    alert('Respuestas enviadas exitosamente');
+    .then(response => {
+    if (response.ok) {
+      window.location.href = '/survey/results';
+    } else {
+      throw new Error('Error al enviar las respuestas');
+    }
   })
   .catch(error => {
-    alert('Error al enviar las respuestas');
+    console.error(error);
   });
+  // .then(response => response.json())
+  // .then(result => {
+  //   alert('Respuestas enviadas exitosamente');
+  // })
+  // .catch(error => {
+  //   alert('Error al enviar las respuestas');
+  // });
 });
 

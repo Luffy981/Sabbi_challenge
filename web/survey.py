@@ -1,19 +1,13 @@
 #!/usr/bin/env python3
 """ Show survey to user """
-
+from models.survey import Survey
 from models import storage, questions, answers
 from os import environ
-from flask import Flask, render_template, jsonify, request, redirect, url_for
-
-
+from flask import Flask, render_template, jsonify, request, redirect, url_for, make_response
 # Application instance
 app = Flask(__name__)
 
 
-@app.teardown_appcontext
-def close_db(error):
-    """ Remove the current SQLAlchemy Session """
-    storage.close()
 
 @app.route('/survey', methods=['GET'], strict_slashes=False)
 def get_survey():
@@ -24,14 +18,14 @@ def get_survey():
 @app.route('/survey/submit', methods=['POST'], strict_slashes=False)
 def submit_survey():
     """ Survey to user """
-    answers = request.get_json()
+    response = request.get_json()
     percent = [0.1, 0.1, 0.15, 0.25, 0.4]
     i = 0
     total = 0
     # print("Soy respuest", answers)
     for question in questions.values():
-        print(answers[question])
-        total += int(answers[question]) * percent[i]
+        print(response[question])
+        total += int(response[question]) * percent[i]
         i += 1
     total = round(total, 2)
     print("TOTAL: ", total)
@@ -45,23 +39,41 @@ def submit_survey():
         flag = 1
 
     if flag == 1:
-        message2 = "Te recomendamos INVERTIR en el Fondo de Fondos Sabbi Hedge Fund FMIV 🚀"
+        recommend = "Te recomendamos INVERTIR en el Fondo de Fondos Sabbi Hedge Fund FMIV 🚀"
     else:
-        message2 = "Te recomendamo NO INVERTIR en el Fondo de Fondos Sabbi Hedge Fund FMIV"
+        recommend = "Te recomendamo NO INVERTIR en el Fondo de Fondos Sabbi Hedge Fund FMIV"
+    data = {
+            'status_s': True,
+            'total_calculated': total,
+            'result': message,
+            'id_user': 1,
+            'recomendation': recommend
+            }
+    instance = Survey(**data)
+    instance.save()
 
-    # return jsonify({'message': 'Answers sent successfully'})
-    return redirect(url_for('show_results',
-                            message=message,
-                            recomendation=message2))
+    return jsonify({'message': 'Answers sent successfully'})
 
 @app.route('/survey/results', methods=['GET'], strict_slashes=False)
 def show_results():
     """ Show results page """
-    message = request.args.get('message')
-    recomendation = request.args.get('recommendation')
+    user_id = 1
+    all_cls = storage.all('Survey')
+    for value in all_cls.values():
+        if (value.id_user == user_id):
+            user_found = value
+
     return render_template('results.html',
-                           message=message,
-                           recomendation=recomendation)
+                           message=user_found.result,
+                           recommendation=user_found.recomendation)
+
+
+@app.teardown_appcontext
+def close_db(error):
+    """ Remove the current SQLAlchemy Session """
+    storage.close()
+    
+
 if __name__ == "__main__":
     """ Main function """
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=4000, debug=True)
