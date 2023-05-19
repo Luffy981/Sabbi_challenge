@@ -14,11 +14,11 @@ class User(BaseModel, Base):
     """ Table representation of a user """
     __tablename__ = 'users'
     id = Column(Integer, autoincrement=True, primary_key=True, unique=True)
-    email = Column(String(128), nullable=False)
-    password = Column(String(128), nullable=False)
+    email = Column(String(128), nullable=True)
+    password = Column(String(128), nullable=True)
     first_name = Column(String(128), nullable=True)
     last_name = Column(String(128), nullable=True)
-    status = Column(Boolean, default=True, nullable=False)
+    status = Column(Boolean, default=True, nullable=True)
 
     def __init__(self, *args, **kwargs):
         """ Init user """

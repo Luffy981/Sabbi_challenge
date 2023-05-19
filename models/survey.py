@@ -13,7 +13,6 @@ class Survey(BaseModel, Base):
     """ Table representation of a user """
     __tablename__ = 'survey'
     id = Column(Integer, autoincrement=True, primary_key=True, unique=True)
-    status_s = Column(Boolean, default=False, nullable=False)
     total_calculated = Column(Integer, nullable=True)
     result = Column(String(600), nullable=True)
     recomendation = Column(String(600), nullable=True)

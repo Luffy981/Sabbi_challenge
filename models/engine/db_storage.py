@@ -8,6 +8,7 @@ from sqlalchemy.orm import sessionmaker
 from os import getenv
 from models.basemodel import Base
 from models.user import User
+from models.survey import Survey
 import models
 
 
@@ -18,7 +19,7 @@ pssw = getenv('DB_MYSQL_PWD') # sabbi_pwd
 host = getenv('DB_MYSQL_HOST') # localhost
 db = getenv('DB_MYSQL_DB') # sabbi_db
 
-classes = {"User": User}
+classes = {"User": User, "Survey": Survey}
 
 class DBStorage:
     __engine = None
@@ -34,9 +35,10 @@ class DBStorage:
         new_dict = {}
         for clss in classes:
             if cls is None or cls is classes[cls] or cls is clss:
-                objs = self.session.query(classes[clss]).all()
+                objs = self.__session.query(classes[clss]).all()
+                print("I AM OBJS: ", objs.__class__.__name__)
                 for obj in objs:
-                    key = obj.__class__.__name__ + '.' + obj.id
+                    key = obj.__class__.__name__ + '.' + str(obj.id)
                     new_dict[key] = obj
         return (new_dict)
 
@@ -57,6 +59,7 @@ class DBStorage:
         """ Reload session """
         Base.metadata.create_all(self.__engine)
         session = sessionmaker(bind=self.__engine, expire_on_commit=False)
+        session = scoped_session(session)
         self.__session = session()
 
     def close(self):
