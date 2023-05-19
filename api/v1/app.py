@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """ Developing Flask application """
+# import pdb; pdb.set_trace()
 from os import environ
 from api.v1.views import app_views
 from models import storage
@@ -7,8 +8,6 @@ from flask import Flask, render_template, make_response, jsonify
 from flask_cors import CORS
 from flasgger import Swagger
 from flasgger.utils import swag_from
-
-
 
 app = Flask(__name__)
 app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
@@ -46,5 +45,6 @@ if __name__ == "__main__":
     if not host:
         host = '0.0.0.0'
     if not port:
-        port = '5000'
+        port = '3000'
+
     app.run(host=host, port=port, threaded=True, debug=True)
