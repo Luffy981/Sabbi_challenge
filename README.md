@@ -1,4 +1,4 @@
-This repository shows the development and solution to the challenge that the Sabbi company posed to me as proof of entry.
+This repository shows the development and solution to the challenge that the Sabbi company posed to me as proof of entry. :monkey:
 ### Challenge Description:
 - Create a risk survey for users.
 - Handle survey questions without using a database
