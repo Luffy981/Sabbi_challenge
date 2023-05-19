@@ -21,7 +21,7 @@ sudo apt-get install mysql-server
 
 ## Usage :monkey:
 - Run API's
-First go to the directory API (cd api/v1) and run the next command:
+First go to the directory API **(cd api/v1)** and run the next command:
 ```
 python3 -m flask --app app.py run
 ```
