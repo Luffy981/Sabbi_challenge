@@ -26,6 +26,3 @@ class Survey(BaseModel, Base):
     def __init__(self, *args, **kwargs):
         """ Init user """
         super().__init__(*args, **kwargs)
-
-
-
